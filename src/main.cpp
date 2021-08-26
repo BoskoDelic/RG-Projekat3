@@ -70,18 +70,13 @@ int main() {
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return EXIT_FAILURE;
     }
 
-    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
 
-    // configure global opengl state
-    // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_CULL_FACE);
@@ -95,7 +90,7 @@ int main() {
     backpackModel.SetShaderTextureNamePrefix("material.");
     Shader backpackShader(FileSystem::getPath("resources/shaders/backpack.vs").c_str(), FileSystem::getPath("resources/shaders/backpack.fs").c_str());
     Shader skyboxShader(FileSystem::getPath("resources/shaders/skybox.vs").c_str(), FileSystem::getPath("resources/shaders/skybox.fs").c_str());
-
+    Shader chestShader(FileSystem::getPath("resources/shaders/chest.vs").c_str(), FileSystem::getPath("resources/shaders/chest.fs").c_str());
 
     float vertices[] = {
             //position          //texture   //normals
@@ -182,6 +177,7 @@ int main() {
             -0.5f,  0.5f,  0.5f,
             -0.5f,  0.5f, -0.5f,
     };
+
     float skyboxVertices[] = {
             // position
             -1.0f,  1.0f, -1.0f,
@@ -230,8 +226,21 @@ int main() {
 
     unsigned int pVBO, pVAO;
     unsigned int rVBO, rVAO, rEBO;
+    unsigned int cVBO, cVAO;
     unsigned int lightVAO, lightVBO;
     unsigned int skyboxVAO, skyboxVBO;
+
+    //chest
+    glGenVertexArrays(1, &cVAO);
+    glGenBuffers(1, &cVBO);
+
+    glBindVertexArray(cVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, cVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
     //piramida
     glGenVertexArrays(1, &pVAO);
@@ -295,7 +304,6 @@ int main() {
     glBindVertexArray(0);
 
     //teksture
-
     unsigned int texture1 = loadTexture(FileSystem::getPath("resources/textures/bricks.jpeg").c_str());
     unsigned int texture2 = loadTexture(FileSystem::getPath("resources/textures/awesomeface.png").c_str());
     unsigned int specularMap = loadTexture(FileSystem::getPath("resources/textures/specular.jpeg").c_str());
@@ -328,9 +336,8 @@ int main() {
     skyboxShader.use();
     skyboxShader.setInt("skybox", 4);
 
+    chestShader.use();
 
-    // render loop
-    // -----------
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
@@ -342,15 +349,10 @@ int main() {
         // -----
         processInput(window);
 
-
         // render
-        // ------
-        // zakomenarisao sam ovu boju da bih isprobao sa crnom
         //glClearColor(0.4f, 0.7f, 0.9f, 1.0f);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // don't forget to enable shader before setting uniforms
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
@@ -439,6 +441,19 @@ int main() {
         model = glm::scale(model, glm::vec3(0.2f));
         backpackShader.setMat4("model", model);
         backpackModel.Draw(backpackShader);
+
+        //chest
+        chestShader.use();
+        chestShader.setMat4("projection", projection);
+        chestShader.setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -2.5f, -1.0f));
+        model = glm::scale(model, glm::vec3(0.3f));
+        chestShader.setMat4("model", model);
+
+        glBindVertexArray(cVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
         //svetlo
         glDisable(GL_CULL_FACE);
