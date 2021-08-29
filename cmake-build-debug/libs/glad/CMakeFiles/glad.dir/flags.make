@@ -6,5 +6,5 @@ C_FLAGS = -g
 
 C_DEFINES = 
 
-C_INCLUDES = -I"/home/bole/Desktop/OVIM RADIM/libs/glad/include" 
+C_INCLUDES = -I/home/milica/Desktop/RG-Projekat3/libs/glad/include 
 

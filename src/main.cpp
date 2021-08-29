@@ -327,8 +327,8 @@ int main() {
         FileSystem::getPath("resources/textures/skybox/jajlands1_lf.jpg"),
         FileSystem::getPath("resources/textures/skybox/jajlands1_up.jpg"),
         FileSystem::getPath("resources/textures/skybox/jajlands1_dn.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_ft.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_bk.jpg")
+        FileSystem::getPath("resources/textures/skybox/jajlands1_bk.jpg"),
+        FileSystem::getPath("resources/textures/skybox/jajlands1_ft.jpg")
     };
 
     unsigned int cubemapTexture = loadCubemap(faces);
@@ -450,7 +450,6 @@ int main() {
         model = glm::translate(model, glm::vec3(0.0f, -2.5f, -1.0f));
         model = glm::scale(model, glm::vec3(0.3f));
         chestShader.setMat4("model", model);
-
         glBindVertexArray(cVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 

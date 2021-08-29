@@ -1,4 +1,4 @@
-# Install script for directory: /home/bole/Desktop/OVIM RADIM/libs/imgui
+# Install script for directory: /home/milica/Desktop/RG-Projekat3/libs/imgui
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

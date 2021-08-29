@@ -6,7 +6,7 @@ CXX_FLAGS = -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -O3 -g   -s
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/bole/Desktop/OVIM RADIM/cmake-build-debug/configuration" -I"/home/bole/Desktop/OVIM RADIM/include" 
+CXX_INCLUDES = -I/home/milica/Desktop/RG-Projekat3/cmake-build-debug/configuration -I/home/milica/Desktop/RG-Projekat3/include 
 
 # Custom flags: CMakeFiles/STB_IMAGE.dir/libs/stb_image.cpp.o_FLAGS = -Wno-shift-negative-value -Wno-implicit-fallthrough
 

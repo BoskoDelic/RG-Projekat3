@@ -6,5 +6,5 @@ CXX_FLAGS = -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -O3 -g   -s
 
 CXX_DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
 
-CXX_INCLUDES = -I"/home/bole/Desktop/OVIM RADIM/libs/imgui/include" -I"/home/bole/Desktop/OVIM RADIM/libs/glad/include" 
+CXX_INCLUDES = -I/home/milica/Desktop/RG-Projekat3/libs/imgui/include -I/home/milica/Desktop/RG-Projekat3/libs/glad/include 
 

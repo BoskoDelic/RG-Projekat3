@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS = -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -O3 -g   -std=gnu++14
 
-CXX_DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
+CXX_DEFINES = -DGLFW_DLL -DIMGUI_IMPL_OPENGL_LOADER_GLAD
 
-CXX_INCLUDES = -I"/home/bole/Desktop/OVIM RADIM/cmake-build-debug/configuration" -I"/home/bole/Desktop/OVIM RADIM/include" -I"/home/bole/Desktop/OVIM RADIM/libs/glad/include" -I"/home/bole/Desktop/OVIM RADIM/libs/imgui/include" 
+CXX_INCLUDES = -I/home/milica/Desktop/RG-Projekat3/cmake-build-debug/configuration -I/home/milica/Desktop/RG-Projekat3/include -I/home/milica/Desktop/RG-Projekat3/libs/glad/include -I/home/milica/Desktop/RG-Projekat3/libs/imgui/include 
 
