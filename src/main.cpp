@@ -42,7 +42,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 //svetlo
-glm::vec3 lightPos(1.0, 3.0, 1.0);
+glm::vec3 lightPos(2.0, 2.0, 2.0);
 
 int main() {
     // glfw: initialize and configure
@@ -80,10 +80,9 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glCullFace(GL_FRONT);
     glFrontFace(GL_CCW);
 
-    Shader pyramidShader(FileSystem::getPath("resources/shaders/pyramid.vs").c_str(), FileSystem::getPath("resources/shaders/pyramid.fs").c_str());
     Shader rectangleShader(FileSystem::getPath("resources/shaders/rectangle.vs").c_str(), FileSystem::getPath("resources/shaders/rectangle.fs").c_str());
     Shader lightSourceShader(FileSystem::getPath("resources/shaders/light_source.vs").c_str(), FileSystem::getPath("resources/shaders/light_source.fs").c_str());
     Model backpackModel("resources/objects/backpack/backpack.obj");
@@ -92,38 +91,10 @@ int main() {
     Shader skyboxShader(FileSystem::getPath("resources/shaders/skybox.vs").c_str(), FileSystem::getPath("resources/shaders/skybox.fs").c_str());
     Shader chestShader(FileSystem::getPath("resources/shaders/chest.vs").c_str(), FileSystem::getPath("resources/shaders/chest.fs").c_str());
 
-    float vertices[] = {
-            //position          //texture   //normals
-             0.0f,  0.0f,  0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.5f,
-             0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.5f,
-            -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f,
-
-             0.0f,  0.0f,  0.5f, 0.5f, 1.0f, -1.0f, 0.0f, 0.5f,
-            -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.5f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f,
-
-             0.0f,  0.0f,  0.5f, 0.5f, 1.0f, 0.0f, -1.0f, 0.5f,
-            -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, -1.0f, 0.5f,
-             0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.5f,
-
-             0.0f,  0.0f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.5f,
-             0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.5f,
-             0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.5f,
-
-
-             0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-            -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
-            -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-            -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
-             0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-             0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f
-
-    };
-
     float verticesRectangle[] = {
             //position          //texture
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
@@ -136,16 +107,16 @@ int main() {
     float verticesLight[] = {
             //position
             -0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f,  0.5f, -0.5f,
-             0.5f,  0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
             -0.5f,  0.5f, -0.5f,
             -0.5f, -0.5f, -0.5f,
 
             -0.5f, -0.5f,  0.5f,
-             0.5f, -0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
             -0.5f,  0.5f,  0.5f,
             -0.5f, -0.5f,  0.5f,
 
@@ -156,24 +127,24 @@ int main() {
             -0.5f, -0.5f,  0.5f,
             -0.5f,  0.5f,  0.5f,
 
-             0.5f,  0.5f,  0.5f,
-             0.5f,  0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
 
             -0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f,  0.5f,
-             0.5f, -0.5f,  0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f, -0.5f,  0.5f,
             -0.5f, -0.5f,  0.5f,
             -0.5f, -0.5f, -0.5f,
 
             -0.5f,  0.5f, -0.5f,
-             0.5f,  0.5f, -0.5f,
-             0.5f,  0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
             -0.5f,  0.5f,  0.5f,
             -0.5f,  0.5f, -0.5f,
     };
@@ -182,9 +153,9 @@ int main() {
             // position
             -1.0f,  1.0f, -1.0f,
             -1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f,  1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
             -1.0f,  1.0f, -1.0f,
 
             -1.0f, -1.0f,  1.0f,
@@ -194,33 +165,33 @@ int main() {
             -1.0f,  1.0f,  1.0f,
             -1.0f, -1.0f,  1.0f,
 
-             1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
 
             -1.0f, -1.0f,  1.0f,
             -1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f,
             -1.0f, -1.0f,  1.0f,
 
             -1.0f,  1.0f, -1.0f,
-             1.0f,  1.0f, -1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
             -1.0f,  1.0f,  1.0f,
             -1.0f,  1.0f, -1.0f,
 
             -1.0f, -1.0f, -1.0f,
             -1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
             -1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f
+            1.0f, -1.0f,  1.0f
     };
 
     float chestVertices[] = {
@@ -233,18 +204,18 @@ int main() {
             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+            0.5f, 0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+            0.5f,  -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-            0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+            -0.5f,  -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+            -0.5f, 0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
 
             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+            -0.5f,  -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            -0.5f, 0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
             -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f, 0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
 
             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
@@ -254,11 +225,11 @@ int main() {
             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
             0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
 
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
             0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
@@ -268,7 +239,6 @@ int main() {
             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
-    unsigned int pVBO, pVAO;
     unsigned int rVBO, rVAO, rEBO;
     unsigned int cVBO, cVAO;
     unsigned int lightVAO, lightVBO;
@@ -288,22 +258,6 @@ int main() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    //piramida
-    glGenVertexArrays(1, &pVAO);
-    glGenBuffers(1, &pVBO);
-
-    glBindVertexArray(pVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, pVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     //tepih
@@ -352,14 +306,6 @@ int main() {
     glBindVertexArray(0);
 
     //teksture
-    unsigned int texture1 = loadTexture(FileSystem::getPath("resources/textures/bricks.jpeg").c_str());
-    unsigned int texture2 = loadTexture(FileSystem::getPath("resources/textures/awesomeface.png").c_str());
-    unsigned int specularMap = loadTexture(FileSystem::getPath("resources/textures/specular.jpeg").c_str());
-
-    pyramidShader.use();
-    pyramidShader.setInt("texture1", 0);
-    pyramidShader.setInt("texture2", 1);
-    pyramidShader.setInt("textureSpecular", 2);
 
     unsigned int texture3 = loadTexture(FileSystem::getPath("resources/textures/tepih.jpg").c_str());
 
@@ -369,14 +315,14 @@ int main() {
     stbi_set_flip_vertically_on_load(false);
 
     vector<std::string> faces
-    {
-        FileSystem::getPath("resources/textures/skybox/jajlands1_rt.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_lf.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_up.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_dn.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_bk.jpg"),
-        FileSystem::getPath("resources/textures/skybox/jajlands1_ft.jpg")
-    };
+            {
+                    FileSystem::getPath("resources/textures/skybox/jajlands1_rt.jpg"),
+                    FileSystem::getPath("resources/textures/skybox/jajlands1_lf.jpg"),
+                    FileSystem::getPath("resources/textures/skybox/jajlands1_up.jpg"),
+                    FileSystem::getPath("resources/textures/skybox/jajlands1_dn.jpg"),
+                    FileSystem::getPath("resources/textures/skybox/jajlands1_bk.jpg"),
+                    FileSystem::getPath("resources/textures/skybox/jajlands1_ft.jpg")
+            };
 
     unsigned int cubemapTexture = loadCubemap(faces);
 
@@ -420,12 +366,6 @@ int main() {
         chestShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
         chestShader.setFloat("material.shininess", 64.0f);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, specularMap);
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, texture3);
         glActiveTexture(GL_TEXTURE5);
@@ -441,54 +381,25 @@ int main() {
         lightPos.z = sin(glfwGetTime()) - 3.0f;
         lightPos.x = cos(glfwGetTime());
 
-        //piramida
-        pyramidShader.use();
-        pyramidShader.setVec3("viewPos", camera.Position);
-
-        pyramidShader.setVec3 ("dirLight.direction", 1.0f, 1.0f, -4.0f);
-        pyramidShader.setVec3("dirLight.ambient", glm::vec3(0.03f));
-        pyramidShader.setVec3("dirLight.diffuse", glm::vec3(0.4f));
-        pyramidShader.setVec3("dirLight.specular", glm::vec3(0.5f));
-
-        pyramidShader.setVec3("pointLight.position", lightPos);
-        pyramidShader.setVec3("pointLight.ambient", glm::vec3(0.2f));
-        pyramidShader.setVec3("pointLight.diffuse", glm::vec3(1.0f));
-        pyramidShader.setVec3("pointLight.specular", glm::vec3(1.0f));
-        pyramidShader.setFloat("pointLight.constant", 1.0f);
-        pyramidShader.setFloat("pointLight.linear", 0.09f);
-        pyramidShader.setFloat("pointLight.quadratic", 0.032f);
-        pyramidShader.setFloat("material.shininess", 32.0f);
-
-        pyramidShader.setMat4("projection", projection);
-        pyramidShader.setMat4("view", view);
-
-        glBindVertexArray(pVAO);
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
-        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(2.0f));
-
-        pyramidShader.setMat4("model", model);
-
-        glDrawArrays(GL_TRIANGLES, 0, 18);
-
         //tepih
+        glDisable(GL_CULL_FACE);
         rectangleShader.use();
         rectangleShader.setMat4("projection", projection);
         rectangleShader.setMat4("view", view);
 
         glBindVertexArray(rVAO);
 
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(1.0f, -2.5f, -1.0f));
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -2.5f, -1.0f));
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        //model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, glm::vec3(2.0f, 1.0f, 3.0f));
 
         rectangleShader.setMat4("model", model);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glEnable(GL_CULL_FACE);
 
         //ranac
         backpackShader.use();
@@ -520,7 +431,7 @@ int main() {
         glBindVertexArray(cVAO);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -2.5f, -1.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.3f));
         chestShader.setMat4("model", model);
 
@@ -562,8 +473,6 @@ int main() {
         glfwPollEvents();
     }
 
-    glDeleteVertexArrays(1, &pVAO);
-    glDeleteBuffers(1, &pVBO);
     glDeleteVertexArrays(1, &rVAO);
     glDeleteBuffers(1, &rVBO);
     glDeleteBuffers(1,&rEBO);
@@ -630,7 +539,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-   camera.ProcessMouseScroll(yoffset);
+    camera.ProcessMouseScroll(yoffset);
 }
 
 unsigned int loadTexture(char const * path)
