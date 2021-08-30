@@ -30,6 +30,8 @@ unsigned int loadCubemap(vector<std::string> faces);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+bool blinn = false;
+bool blinnKeyPressed = false;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -42,7 +44,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 //svetlo
-glm::vec3 lightPos(2.0, 2.0, 2.0);
+glm::vec3 lightPos(3.0, 1.5, 2.0);
 
 int main() {
     // glfw: initialize and configure
@@ -85,9 +87,9 @@ int main() {
 
     Shader rectangleShader(FileSystem::getPath("resources/shaders/rectangle.vs").c_str(), FileSystem::getPath("resources/shaders/rectangle.fs").c_str());
     Shader lightSourceShader(FileSystem::getPath("resources/shaders/light_source.vs").c_str(), FileSystem::getPath("resources/shaders/light_source.fs").c_str());
-    Model backpackModel("resources/objects/backpack/backpack.obj");
-    backpackModel.SetShaderTextureNamePrefix("material.");
-    Shader backpackShader(FileSystem::getPath("resources/shaders/backpack.vs").c_str(), FileSystem::getPath("resources/shaders/backpack.fs").c_str());
+    Model cyborgModel("resources/objects/cyborg/cyborg.obj");
+    cyborgModel.SetShaderTextureNamePrefix("material.");
+    Shader cyborgShader(FileSystem::getPath("resources/shaders/cyborg.vs").c_str(), FileSystem::getPath("resources/shaders/cyborg.fs").c_str());
     Shader skyboxShader(FileSystem::getPath("resources/shaders/skybox.vs").c_str(), FileSystem::getPath("resources/shaders/skybox.fs").c_str());
     Shader chestShader(FileSystem::getPath("resources/shaders/chest.vs").c_str(), FileSystem::getPath("resources/shaders/chest.fs").c_str());
 
@@ -356,6 +358,8 @@ int main() {
         chestShader.use();
         chestShader.setVec3("light.position", lightPos);
         chestShader.setVec3("viewPos", camera.Position);
+        chestShader.setInt("blinn", blinn);
+
 
         // light properties
         chestShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
@@ -401,27 +405,27 @@ int main() {
 
         glEnable(GL_CULL_FACE);
 
-        //ranac
-        backpackShader.use();
-        backpackShader.setVec3("viewPos", camera.Position);
-        backpackShader.setVec3("pointLight.position", lightPos);
-        backpackShader.setVec3("pointLight.ambient", glm::vec3(0.2f));
-        backpackShader.setVec3("pointLight.diffuse", glm::vec3(1.0f));
-        backpackShader.setVec3("pointLight.specular", glm::vec3(1.0f));
-        backpackShader.setFloat("pointLight.constant", 1.0f);
-        backpackShader.setFloat("pointLight.linear", 0.09f);
-        backpackShader.setFloat("pointLight.quadratic", 0.032f);
-        backpackShader.setFloat("material.shininess", 32.0f);
+        //cyborg
+        cyborgShader.use();
+        cyborgShader.setVec3("viewPos", camera.Position);
+        cyborgShader.setVec3("pointLight.position", lightPos);
+        cyborgShader.setVec3("pointLight.ambient", glm::vec3(0.2f));
+        cyborgShader.setVec3("pointLight.diffuse", glm::vec3(1.0f));
+        cyborgShader.setVec3("pointLight.specular", glm::vec3(1.0f));
+        cyborgShader.setFloat("pointLight.constant", 1.0f);
+        cyborgShader.setFloat("pointLight.linear", 0.09f);
+        cyborgShader.setFloat("pointLight.quadratic", 0.032f);
+        cyborgShader.setFloat("material.shininess", 32.0f);
 
-        backpackShader.setMat4("projection", projection);
-        backpackShader.setMat4("view", view);
+        cyborgShader.setMat4("projection", projection);
+        cyborgShader.setMat4("view", view);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-0.4f, -0.6f, -1.97f));
+        model = glm::translate(model, glm::vec3(0.0f, -0.9f, -1.97f));
         model = glm::rotate(model, glm::radians(-25.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.2f));
-        backpackShader.setMat4("model", model);
-        backpackModel.Draw(backpackShader);
+        cyborgShader.setMat4("model", model);
+        cyborgModel.Draw(cyborgShader);
 
         //chest
         chestShader.use();
@@ -431,7 +435,7 @@ int main() {
         glBindVertexArray(cVAO);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -0.8f, -0.2f));
         model = glm::scale(model, glm::vec3(0.3f));
         chestShader.setMat4("model", model);
 
@@ -505,6 +509,16 @@ void processInput(GLFWwindow *window) {
         camera.ProcessKeyboard(UP, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         camera.ProcessKeyboard(DOWN, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !blinnKeyPressed)
+    {
+        blinn = !blinn;
+        blinnKeyPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
+    {
+        blinnKeyPressed = false;
+    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
