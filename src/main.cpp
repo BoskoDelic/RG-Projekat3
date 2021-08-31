@@ -421,8 +421,8 @@ int main() {
         cyborgShader.setMat4("view", view);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.9f, -1.97f));
-        model = glm::rotate(model, glm::radians(-25.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, -0.99f, -1.97f));
+       //model = glm::rotate(model, glm::radians(-25.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.2f));
         cyborgShader.setMat4("model", model);
         cyborgModel.Draw(cyborgShader);
